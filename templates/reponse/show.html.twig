@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}📄 Détail Réponse{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">📩 Détail de la Réponse</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table class="table table-bordered table-hover">
+                <tbody>
+                    <tr>
+                        <th class="bg-light">🆔 ID</th>
+                        <td>{{ reponse.ID_Reponse }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">✉️ Contenu</th>
+                        <td>{{ reponse.Contenu }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">📅 Date de Réponse</th>
+                        <td>{{ reponse.DateReponse ? reponse.DateReponse|date('Y-m-d H:i:s') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light">📌 Statut</th>
+                        <td>
+                            {% if reponse.Statut == 'Résolue' %}
+                                <span class="badge bg-success">Résolue</span>
+                            {% elseif reponse.Statut == 'En attente' %}
+                                <span class="badge bg-warning text-dark">En attente</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ reponse.Statut }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-4 d-flex justify-content-between">
+        <a href="{{ path('app_reponse_index') }}" class="btn btn-outline-primary">
+            ⬅ Retour à la liste
+        </a>
+
+        {{ include('reponse/_delete_form.html.twig') }}
+    </div>
+</div>
+{% endblock %}

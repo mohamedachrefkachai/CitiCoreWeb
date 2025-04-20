@@ -1,0 +1,51 @@
+{% extends 'back/Dashboard.html.twig' %}
+
+{% block title %}📄 Détail Réclamation{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">📌 Sujet : {{ reclamation.Sujet }}</h4>
+            {% if reclamation.reponses|length > 0 %}
+                <span class="badge bg-success fs-6">✅ Répondu</span>
+            {% else %}
+                <span class="badge bg-warning text-dark fs-6">⏳ En attente</span>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <p><strong>📝 Message :</strong></p>
+            <p class="ps-3">{{ reclamation.Description }}</p>
+
+            <p><strong>📅 Date de création :</strong> 
+                {{ reclamation.DateCreation ? reclamation.DateCreation|date('d/m/Y à H:i') : 'Non renseignée' }}
+            </p>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <h5 class="mb-3 border-bottom pb-2">💬 Réponses associées</h5>
+
+        {% if reclamation.reponses is not empty %}
+            {% for reponse in reclamation.reponses %}
+                <div class="alert alert-info animate__animated animate__fadeInUp shadow-sm">
+                    <div class="d-flex justify-content-between">
+                        <strong>📆 {{ reponse.dateReponse|date('d/m/Y à H:i') }}</strong>
+                        <span class="badge bg-secondary">{{ reponse.statut }}</span>
+                    </div>
+                    <hr class="my-2" />
+                    <p>{{ reponse.Contenu }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted fst-italic">Aucune réponse n’a encore été donnée à cette réclamation.</p>
+        {% endif %}
+    </div>
+
+    <div class="mt-4 text-center">
+        <a href="{{ path('app_reclamation_index') }}" class="btn btn-outline-primary px-4">
+            ⬅ Retour à la liste des réclamations
+        </a>
+    </div>
+</div>
+{% endblock %}
