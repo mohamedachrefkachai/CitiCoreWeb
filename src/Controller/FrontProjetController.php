@@ -9,6 +9,9 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\ProjetDonRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\AssociationRepository;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Service\GeminiService;
+
 
 final class FrontProjetController extends AbstractController
 {
@@ -71,11 +74,27 @@ public function donner(Request $request, ProjetDonRepository $projetDonRepositor
             'associations' => $associations,
         ]);
     }
-    #[Route('/front/chatbot', name: 'chatbot_page')]
+    
+#[Route('/front/chatbot', name: 'chatbot_page', methods: ['GET'])]
 public function chatbot(): Response
 {
     return $this->render('front_projet/chatbot.html.twig');
 }
+#[Route('/front/chatbot/respond', name: 'chatbot_respond', methods: ['POST'])]
+public function chatbotRespond(Request $request, GeminiService $gemini): JsonResponse
+{
+    $data = json_decode($request->getContent(), true);
+    $userMessage = $data['message'] ?? '';
+
+    if (empty($userMessage)) {
+        return $this->json(['reply' => 'Veuillez entrer un message valide.']);
+    }
+
+    $reply = $gemini->generateResponse($userMessage);
+    return $this->json(['reply' => $reply]);
+}
+
+    
 
 
 
